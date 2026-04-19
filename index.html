@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Tech Academy | Learn & Earn Certificate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .logo span { color: #ff6b6b; }
+
+        nav a {
+            color: white;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: #ff6b6b; }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 2rem;
+        }
+
+        .intro {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .intro h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        .intro-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            margin: 1rem auto;
+            display: block;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 1rem 0;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .program-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .program-card:hover { transform: translateY(-5px); }
+        .program-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .program-info { padding: 1.5rem; }
+        .program-info h3 { color: #667eea; margin-bottom: 1rem; }
+        .price {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: white;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 20px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #999;
+        }
+        .close:hover { color: #ff6b6b; }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            padding-right: 40px;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+
+        .payment-details {
+            background: #e8f0fe;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 5px solid #25D366;
+        }
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        /* Dashboard section */
+        .dashboard {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .dashboard h2 { color: #667eea; margin-bottom: 1rem; }
+        .user-info { background: #f5f5f5; padding: 1rem; border-radius: 10px; margin: 1rem 0; }
+
+        /* Certificate design */
+        .certificate {
+            background: white;
+            border: 15px double #ffd700;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 20px;
+            position: relative;
+            font-family: 'Times New Roman', serif;
+        }
+        .certificate:before {
+            content: "🎓";
+            font-size: 50px;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            opacity: 0.3;
+        }
+        .certificate h1 {
+            font-size: 2rem;
+            color: #2c3e66;
+            letter-spacing: 2px;
+        }
+        .certificate h2 {
+            color: #b8860b;
+            border-bottom: 2px solid #ffd700;
+            display: inline-block;
+            padding-bottom: 5px;
+            margin: 20px 0;
+        }
+        .student-name {
+            font-size: 2.2rem;
+            color: #c0392b;
+            margin: 20px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .certificate-footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .signature {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .signature-line {
+            width: 200px;
+            border-top: 1px solid #333;
+            margin: 10px auto;
+        }
+        .seal {
+            font-size: 3rem;
+            opacity: 0.7;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .login-link a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .message-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .logout-btn {
+            background: #ff6b6b;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Star Tech <span>Academy</span></div>
+        <nav>
+            <a onclick="showIntro()">Home</a>
+            <a onclick="showPrograms()">Programs</a>
+            <a id="certNavLink" onclick="showCertificatePanel()" style="display:none;">🎓 Certificate</a>
+            <a id="dashboardLink" onclick="showDashboard()" style="display:none;">📊 Dashboard</a>
+            <a id="logoutLink" onclick="logout()" style="display:none;" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container" id="mainContainer">
+        <div id="introSection">
+            <div class="intro">
+                <h1>Welcome to Star Tech Academy</h1>
+                <p>Empowering the next generation of tech innovators with world-class training and career support.</p>
+                <img id="introImg" class="intro-image" alt="Star Tech Academy">
+                <br>
+                <button class="btn" onclick="showPrograms()">Click to View Our Programs</button>
+            </div>
+        </div>
+
+        <div id="programsSection" style="display: none;">
+            <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Our Programs</h2>
+            <div class="programs-grid" id="programsGrid"></div>
+        </div>
+
+        <!-- Dashboard after login -->
+        <div id="dashboardSection" style="display: none;">
+            <div class="dashboard">
+                <h2>🙋‍♀️ Welcome, <span id="dashboardName"></span></h2>
+                <div class="user-info">
+                    <p><strong>📧 Email:</strong> <span id="dashboardEmail"></span></p>
+                    <p><strong>📚 Program:</strong> <span id="dashboardProgram"></span></p>
+                    <p><strong>📅 Registration Date:</strong> <span id="dashboardRegDate"></span></p>
+                    <p><strong>⏳ Training Status:</strong> <span id="trainingStatus"></span></p>
+                </div>
+
+                <!-- Payment Section (shown only after login) -->
+                <div id="paymentSection">
+                    <h3>💳 Complete Your Payment</h3>
+                    <p>To activate your certificate countdown, please make payment and confirm via WhatsApp.</p>
+                    <div class="payment-details">
+                        <h4>Bank Transfer Details</h4>
+                        <p><strong>Bank:</strong> Opay<br>
+                        <strong>Account Name:</strong> Egbe Arinzechukwu Shedrach<br>
+                        <strong>Account Number:</strong> 8129538960</p>
+                        <p><strong>OR</strong></p>
+                        <p><strong>Bank:</strong> Access Bank<br>
+                        <strong>Account Name:</strong> Egbe Arinzechukwu Shedrach<br>
+                        <strong>Account Number:</strong> 1855708819</p>
+                        <p><strong>Amount to Pay:</strong> <span id="payAmount">#10,000</span></p>
+                    </div>
+                    <button class="whatsapp-btn" onclick="sendPaymentConfirmation()">
+                        📱 Send Payment Confirmation on WhatsApp
+                    </button>
+                    <p style="margin-top: 10px; font-size: 0.8rem;">After sending, admin will verify. Certificate becomes available after 2 months from registration.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal (no payment details here) -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Register for Program</h2>
+            <form id="registrationForm">
+                <input type="hidden" id="selectedProgram">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label>Nationality</label>
+                    <input type="text" id="nationality" required>
+                </div>
+                <div class="form-group">
+                    <label>State of Origin</label>
+                    <input type="text" id="stateOfOrigin" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phoneNumber" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                    <span class="password-toggle" onclick="togglePassword('password')">👁️</span>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                    <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
+                </div>
+                <button type="button" class="btn" style="width:100%;" onclick="completeRegistration()">Register</button>
+                <div class="login-link">
+                    <a onclick="showLoginModal()">Already have an account? Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to Your Account</h2>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" required>
+                <span class="password-toggle" onclick="togglePassword('loginPassword')">👁️</span>
+            </div>
+            <button class="btn" onclick="loginUser()">Login</button>
+            <div class="login-link">
+                <a onclick="showForgotPassword()">Forgot Password?</a> | 
+                <a onclick="closeLoginModal(); showRegistrationForProgram()">Register</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForgotModal()">&times;</span>
+            <h2>Reset Password</h2>
+            <p>Enter your email to receive reset link (demo: check console)</p>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="resetEmail" required>
+            </div>
+            <button class="btn" onclick="resetPassword()">Send Reset Link</button>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div id="certificateModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close" onclick="closeCertificateModal()">&times;</span>
+            <div id="certificateContent"></div>
+        </div>
+    </div>
+
+    <!-- Reminder Modal -->
+    <div id="reminderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReminderModal()">&times;</span>
+            <div class="message-box">
+                <h3>📘 Complete Your Training First</h3>
+                <p id="reminderMessage"></p>
+                <button class="btn" onclick="closeReminderModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const programs = [
+            { name: "Web Development (Frontend)", image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%234CAF50'/%3E%3Ctext x='150' y='110' font-size='20' fill='white' text-anchor='middle'%3EWeb Dev%3C/text%3E%3C/svg%3E", skills: ["HTML","CSS","JavaScript","Node.js"], duration: "2 months", price: "#10,000" },
+            { name: "Backend Developer", image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%232196F3'/%3E%3Ctext x='150' y='110' font-size='20' fill='white' text-anchor='middle'%3EBackend%3C/text%3E%3C/svg%3E", skills: ["Node.js","Python","Java"], duration: "2 months", price: "#10,000" },
+            { name: "Cybersecurity", image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23FF5722'/%3E%3Ctext x='150' y='110' font-size='20' fill='white' text-anchor='middle'%3ECyber%3C/text%3E%3C/svg%3E", skills: ["Python","JavaScript","C++"], duration: "2 months", price: "#10,000" },
+            { name: "Software Engineering", image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%239C27B0'/%3E%3Ctext x='150' y='110' font-size='20' fill='white' text-anchor='middle'%3ESoft Eng%3C/text%3E%3C/svg%3E", skills: ["Python","Java","C#"], duration: "2 months", price: "#10,000" },
+            { name: "Data Science", image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23FFC107'/%3E%3Ctext x='150' y='110' font-size='18' fill='black' text-anchor='middle'%3EData Science%3C/text%3E%3C/svg%3E", skills: ["Python","R","SQL"], duration: "2 months", price: "#10,000" }
+        ];
+
+        let users = JSON.parse(localStorage.getItem('academyUsers')) || [];
+        let currentUser = null;
+
+        function showPrograms() {
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('programsSection').style.display = 'block';
+            document.getElementById('dashboardSection').style.display = 'none';
+            loadPrograms();
+        }
+        function showIntro() {
+            document.getElementById('introSection').style.display = 'block';
+            document.getElementById('programsSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'none';
+        }
+        function loadPrograms() {
+            const grid = document.getElementById('programsGrid');
+            grid.innerHTML = '';
+            programs.forEach(prog => {
+                const card = document.createElement('div');
+                card.className = 'program-card';
+                card.onclick = () => showRegistrationForProgram(prog.name, prog.price);
+                card.innerHTML = `
+                    <img src="${prog.image}" class="program-image">
+                    <div class="program-info">
+                        <h3>${prog.name}</h3>
+                        <p><strong>Skills:</strong> ${prog.skills.join(', ')}</p>
+                        <p><strong>Duration:</strong> ${prog.duration}</p>
+                        <p class="price">${prog.price}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        let selectedProgramPrice = "";
+        function showRegistrationForProgram(progName, progPrice) {
+            selectedProgramPrice = progPrice;
+            document.getElementById('selectedProgram').value = progName;
+            document.getElementById('registerModal').style.display = 'block';
+        }
+
+        function completeRegistration() {
+            let fullName = document.getElementById('fullName').value;
+            let nationality = document.getElementById('nationality').value;
+            let state = document.getElementById('stateOfOrigin').value;
+            let phone = document.getElementById('phoneNumber').value;
+            let email = document.getElementById('email').value;
+            let pwd = document.getElementById('password').value;
+            let confirm = document.getElementById('confirmPassword').value;
+            let program = document.getElementById('selectedProgram').value;
+
+            if(!fullName || !nationality || !state || !phone || !email || !pwd) {
+                alert("Please fill all fields");
+                return;
+            }
+            if(pwd !== confirm) {
+                alert("Passwords do not match");
+                return;
+            }
+            if(users.find(u => u.email === email)) {
+                alert("User already exists. Please login.");
+                closeModal();
+                showLoginModal();
+                return;
+            }
+
+            let newUser = {
+                fullName, nationality, stateOfOrigin: state, phoneNumber: phone, email, password: pwd,
+                program: program,
+                programPrice: selectedProgramPrice,
+                registrationDate: new Date().toISOString(),
+                paymentConfirmed: false,
+                completed: false
+            };
+            users.push(newUser);
+            localStorage.setItem('academyUsers', JSON.stringify(users));
+            alert("Registration successful! Please login to view payment details and complete your enrollment.");
+            closeModal();
+            showLoginModal();
+        }
+
+        function loginUser() {
+            let email = document.getElementById('loginEmail').value;
+            let pwd = document.getElementById('loginPassword').value;
+            let user = users.find(u => u.email === email && u.password === pwd);
+            if(user) {
+                currentUser = user;
+                closeLoginModal();
+                document.getElementById('dashboardName').innerText = user.fullName;
+                document.getElementById('dashboardEmail').innerText = user.email;
+                document.getElementById('dashboardProgram').innerText = user.program;
+                document.getElementById('dashboardRegDate').innerText = new Date(user.registrationDate).toLocaleDateString();
+                document.getElementById('payAmount').innerText = user.programPrice;
+                updateTrainingStatus();
+                showDashboard();
+                // Show nav links
+                document.getElementById('certNavLink').style.display = 'inline';
+                document.getElementById('dashboardLink').style.display = 'inline';
+                document.getElementById('logoutLink').style.display = 'inline';
+                alert(`Welcome back ${user.fullName}!`);
+            } else {
+                alert("Invalid credentials. Please register first.");
+            }
+        }
+
+        function updateTrainingStatus() {
+            if(!currentUser) return;
+            let regDate = new Date(currentUser.registrationDate);
+            let now = new Date();
+            let monthsDiff = (now.getFullYear() - regDate.getFullYear()) * 12 + (now.getMonth() - regDate.getMonth());
+            let statusSpan = document.getElementById('trainingStatus');
+            if(monthsDiff >= 2) {
+                statusSpan.innerHTML = "✅ Training completed! You can now generate your certificate.";
+                statusSpan.style.color = "green";
+            } else {
+                let remaining = 2 - monthsDiff;
+                statusSpan.innerHTML = `⏳ In progress. ${remaining} month(s) remaining to complete training.`;
+                statusSpan.style.color = "orange";
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('introSection').style.display = 'none';
+            document.getElementById('programsSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            updateTrainingStatus();
+        }
+
+        function sendPaymentConfirmation() {
+            if(!currentUser) return;
+            let msg = `✅ Payment Confirmation - Star Tech Academy\n\nName: ${currentUser.fullName}\nProgram: ${currentUser.program}\nPhone: ${currentUser.phoneNumber}\nAmount: ${currentUser.programPrice}\n\nI have made the payment to the provided bank account. Please confirm.`;
+            window.open(`https://wa.me/2348129538960?text=${encodeURIComponent(msg)}`, '_blank');
+            alert("Payment confirmation sent. Admin will verify. Your certificate will be available after 2 months from registration.");
+        }
+
+        function showCertificatePanel() {
+            if(!currentUser) {
+                alert("Please login first.");
+                showLoginModal();
+                return;
+            }
+            let regDate = new Date(currentUser.registrationDate);
+            let now = new Date();
+            let monthsDiff = (now.getFullYear() - regDate.getFullYear()) * 12 + (now.getMonth() - regDate.getMonth());
+            if(monthsDiff >= 2) {
+                generateCertificate(currentUser);
+            } else {
+                let remaining = 2 - monthsDiff;
+                document.getElementById('reminderMessage').innerHTML = `You have completed ${monthsDiff} month(s). ${remaining} month(s) remaining to complete your ${currentUser.program} training. Please complete your course and come back later.`;
+                document.getElementById('reminderModal').style.display = 'block';
+            }
+        }
+
+        function generateCertificate(user) {
+            let certHTML = `
+                <div class="certificate">
+                    <div style="text-align: right;" class="seal">🎓✨</div>
+                    <h1>STAR TECH ACADEMY</h1>
+                    <h2>CERTIFICATE OF COMPLETION</h2>
+                    <p>This certificate is proudly presented to</p>
+                    <div class="student-name">${user.fullName}</div>
+                    <p>for successfully completing the</p>
+                    <h3 style="color:#2c3e66;">${user.program} Program</h3>
+                    <p>with outstanding dedication and skill mastery.</p>
+                    <p><strong>Nationality:</strong> ${user.nationality} &nbsp;|&nbsp; <strong>State:</strong> ${user.stateOfOrigin}</p>
+                    <p><strong>Duration:</strong> 2 months intensive training</p>
+                    <p><strong>Date Issued:</strong> ${new Date().toLocaleDateString()}</p>
+                    <div class="certificate-footer">
+                        <div class="signature">
+                            <div class="signature-line"></div>
+                            <p>Egbe Arinzechukwu Shedrach</p>
+                            <p>Founder, Star Tech Academy</p>
+                        </div>
+                        <div class="seal">⭐ OFFICIAL SEAL ⭐</div>
+                    </div>
+                    <button class="download-btn" onclick="downloadCertificate()">📥 Download Certificate (PDF)</button>
+                </div>
+            `;
+            document.getElementById('certificateContent').innerHTML = certHTML;
+            document.getElementById('certificateModal').style.display = 'block';
+        }
+
+        function downloadCertificate() {
+            let content = document.getElementById('certificateContent').innerHTML;
+            let win = window.open();
+            win.document.write(`
+                <html><head><title>Star Tech Certificate</title>
+                <style>
+                    body { font-family: 'Times New Roman', serif; padding: 40px; }
+                    .certificate { border: 15px double gold; padding: 30px; text-align: center; max-width: 800px; margin: auto; }
+                    .student-name { font-size: 28px; color: #c0392b; margin: 20px; }
+                    .signature-line { width: 200px; border-top: 1px solid black; margin: 10px auto; }
+                </style>
+                </head><body>${content.replace('<button class="download-btn" onclick="downloadCertificate()">📥 Download Certificate (PDF)</button>', '')}</body></html>
+            `);
+            win.print();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('certNavLink').style.display = 'none';
+            document.getElementById('dashboardLink').style.display = 'none';
+            document.getElementById('logoutLink').style.display = 'none';
+            showIntro();
+            alert("Logged out successfully.");
+        }
+
+        // Helper functions
+        function togglePassword(fieldId) {
+            let field = document.getElementById(fieldId);
+            field.type = field.type === "password" ? "text" : "password";
+        }
+        function closeModal() { document.getElementById('registerModal').style.display = 'none'; document.getElementById('registrationForm').reset(); }
+        function showLoginModal() { closeModal(); document.getElementById('loginModal').style.display = 'block'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function showForgotPassword() { closeModal(); document.getElementById('forgotModal').style.display = 'block'; }
+        function closeForgotModal() { document.getElementById('forgotModal').style.display = 'none'; }
+        function resetPassword() { let email = document.getElementById('resetEmail').value; if(users.find(u=>u.email===email)) alert("Reset link sent to "+email); else alert("Email not found"); closeForgotModal(); }
+        function closeCertificateModal() { document.getElementById('certificateModal').style.display = 'none'; }
+        function closeReminderModal() { document.getElementById('reminderModal').style.display = 'none'; }
+
+        document.getElementById('introImg').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23607d8b'/%3E%3Ctext x='400' y='180' font-size='32' fill='white' text-anchor='middle'%3EStar Tech Academy%3C/text%3E%3Ctext x='400' y='230' font-size='20' fill='white' text-anchor='middle'%3ELearn. Build. Succeed.%3C/text%3E%3C/svg%3E";
+        loadPrograms();
+    </script>
+</body>
+</html>
